@@ -19,70 +19,46 @@
         <canvas id="zheng" width=300" height="300px">你的浏览器不支持CANVAS</canvas>
     </div>
     <script>
-        var date1 = new Date();
-        var hr = date1.getHours();
-        var min = date1.getMinutes();
-        var sec = date1.getSeconds();
+
         var sz = document.querySelector("#zheng");
         var zz = sz.getContext("2d");
 
 
-
-
-//        draw();
-        for (var i = 0; i < 1000; i++){
-            setTimeout(draw,i * 500);
-        }
-
+        draw( );
         function draw() {
+            zz.clearRect(0,0,300,300);
             zz.save();
-            zz.translate(150,150);
-            drawhr();
-            drawmin();
-            drawsec();
-            requestAnimationFrame(draw);
-            zz.restore()
-        }
-//        setInterval(() =>{
-//           drawhr();
-//           drawmin();
-//           drawsec();
-//        },1000)
-//        zz.clearRect(0,0,300,300)
-        function drawhr() {
-            zz.save();
+            zz.translate(150, 150);
+            var date1 = new Date();
+            var hr = date1.getHours();
+            var min = date1.getMinutes();
+            var sec = date1.getSeconds();
+
             zz.beginPath();
-            zz.rotate(Math.PI*hr/6+(Math.PI*min/30+(Math.PI*sec/30)/60)/12);
-            zz.moveTo(0,5);
-            zz.lineTo(0,-70);
+            zz.rotate(Math.PI * hr / 6 + (Math.PI * min / 30 + (Math.PI * sec / 30) / 60) / 12);
+            zz.moveTo(0, 5);
+            zz.lineTo(0, -70);
             zz.strokeStyle = "#f11";
             zz.lineWidth = 8;
             zz.stroke();
-            zz.restore();
-        }
 
-        function drawmin() {
-            zz.save();
             zz.beginPath();
-            zz.rotate(Math.PI*min/30+(Math.PI*sec/30)/60);
-            zz.moveTo(0,10);
-            zz.lineTo(0,-90);
+            zz.rotate(Math.PI * min / 30 + (Math.PI * sec / 30) / 60);
+            zz.moveTo(0, 10);
+            zz.lineTo(0, -90);
             zz.strokeStyle = "#ccc";
             zz.lineWidth = 4;
             zz.stroke();
-            zz.restore();
-        }
 
-        function drawsec() {
-            zz.save();
             zz.beginPath();
-            zz.rotate(Math.PI*sec/30);
-            zz.moveTo(0,20);
-            zz.lineTo(0,-120);
+            zz.rotate(Math.PI * sec / 30);
+            zz.moveTo(0, 20);
+            zz.lineTo(0, -120);
             zz.strokeStyle = "#ff00ff";
             zz.lineWidth = 2;
             zz.stroke();
-            zz.restore();
+            zz.restore()
+            window.requestAnimationFrame(draw)
         }
 
     </script>
