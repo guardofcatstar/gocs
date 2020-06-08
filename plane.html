@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>飞机大战</title>
+    <style>
+        canvas{
+            position: absolute;
+        }
+    </style>
+    <!--<script src ='plane.js'></script>-->
+</head>
+<body>
+    <canvas id = 'bgImage' width="392px" height="640px"></canvas>
+    <canvas id = 'plane' width="392px" height="640px"></canvas>
+    <canvas id = 'enemy'></canvas>
+
+
+    <script>
+        <!--定义三块画布 并给予画笔-->
+        var bgImage = document.querySelector('#bgImage');
+        var bgctx = bgImage.getContext('2d');
+        var plane = document.querySelector('#plane');
+        var plctx = plane.getContext('2d');
+        var enemy = document.querySelector('#enemy');
+        var enctx = enemy.getContext('2d');
+
+//        导入图片
+        var bg = new Image();
+        bg.src = 'bgImage.png';
+
+
+
+        var speed = 5;
+//        背景图运动
+        var bgDraw = function bgDraw(URL,x,y,canvas) {
+            this.URL = URL;
+            U1 = this.URL;
+            this.x = x;
+            x1 =this.x;
+            this.y = y;
+            y1 = this.y;
+            this.canvas = canvas;
+            c1 = this.canvas;
+            var width = URL.width;
+            var height = URL.height;
+            setInterval(function () {
+                if(y1>height){
+                    y1 = 0;
+                }
+                y1+=speed;
+                bgctx.save();
+                bgctx.clearRect(0,0,width,height);
+                bgctx.drawImage(U1,x1,y1,width,height);
+                bgctx.drawImage(U1,x1,y1,width,-height);
+                bgctx.restore();
+            },30);
+        };
+
+        bgDraw(bg,0,0,bgImage);
+
+
+
+//        主角飞机出场
+        var bool = true;
+        var pl = new Image();
+        pl.src = 'plane.png';
+
+
+        var plDraw = function plDraw(URL,x,y,canvas) {
+            this.URL = URL;
+            this.x = x;
+            this.y = y;
+            this.canvas = canvas;
+            var width = canvas.width;
+            var height = canvas.height;
+            setInterval(function () {
+
+                plctx.save();
+                plctx.clearRect(0,0,width,height);
+                plctx.drawImage(this.URL,this.x*bool,0,this.x,this.y,width/2 ,height/2,this.x,this.y);
+                bool = !bool;
+                plctx.restore();
+            },30);
+        };
+
+        plDraw(pl,68,64,plane);
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+</body>
+</html>
