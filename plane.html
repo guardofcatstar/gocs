@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>飞机大战</title>
+    <style>
+        canvas{
+            position: absolute;
+        }
+        #bgImage{
+            border: 1px solid;
+        }
+        #plane{
+            z-index: 3;
+        }
+    </style>
+    <!--<script src ='plane.js'></script>-->
+</head>
+<body>
+    <canvas id = 'bgImage' width="360px" height="640px"></canvas>
+    <canvas id = 'plane' width="360px" height="640px"></canvas>
+    <canvas id = 'enemy' width="360px" height="640px"></canvas>
+
+
+    <script>
+        <!--定义三块画布 并给予画笔-->
+        var bgImage = document.querySelector('#bgImage');
+        var bgctx = bgImage.getContext('2d');
+        var plane = document.querySelector('#plane');
+        var plctx = plane.getContext('2d');
+        var enemy = document.querySelector('#enemy');
+        var enctx = enemy.getContext('2d');
+
+//        导入图片
+        var bg = new Image();
+        bg.src = 'bgImage.png';
+
+
+
+        var speed = 5;
+//        背景图运动
+        var bgDraw = function bgDraw(URL,x,y,canvas) {
+            this.URL = URL;
+            U1 = this.URL;
+            this.x = x;
+            x1 =this.x;
+            this.y = y;
+            y1 = this.y;
+            this.canvas = canvas;
+            c1 = this.canvas;
+            var width = URL.width;
+            var height = URL.height;
+            setInterval(function () {
+                if(y1>height){
+                    y1 = 0;
+                }
+                y1+=speed;
+                bgctx.save();
+                bgctx.clearRect(0,0,width,height);
+                bgctx.drawImage(U1,x1,y1,width,height);
+                bgctx.drawImage(U1,x1,y1,width,-height);
+                bgctx.restore();
+            },30);
+        };
+
+        bgDraw(bg,0,0,bgImage);
+
+
+
+//        主角飞机出场  子弹和飞机一个画布
+        var bool = true;
+        var pl = new Image();
+        pl.src = 'plane.png';
+
+
+
+        var plDraw = function plDraw(URL,x,y,canvas) {
+            var bullet = new Array();
+            var plURL = URL;
+            var plx = x;
+            var ply = y;
+            var plcanvas = canvas;
+            var width = plcanvas.width;
+            var height = plcanvas.height;
+            var speed = 20;
+            var w;
+            var h;
+            var movespeed = 10;
+
+
+//            接受键盘运动指示
+            document.onkeydown = function (e) {
+                event = e || window.event;
+                switch(event.keyCode){
+                    case 37:
+                        if(width/2-plx+34>0){
+                        plx += movespeed;
+                        }
+                        break;
+
+                    case 38:
+                        if(height-ply-20>0){
+                        ply += movespeed;
+                        }
+                        break;
+
+                    case 39:
+                        if((width/2-plx+34)<width-68){
+                            plx -= movespeed;
+                        }
+                        break;
+
+                    case 40:
+                        if(height-ply-20<height-64){
+                        ply -= movespeed;
+                        }
+                        break;
+
+                }
+            }
+
+
+
+
+
+
+            setInterval(function () {
+
+                plctx.save();
+                plctx.clearRect(0,0,width,height);
+                plctx.drawImage(plURL,68*bool,0,68,64,width/2-plx+34 ,height-ply-20,68,64);
+                bool = !bool;
+
+//                用数组来画子弹
+                for(var i =0;i < bullet.length;i++) {
+                    plctx.drawImage(plURL, 138, 0, 40, 6, bullet[i].x, bullet[i].y, 40, 6);
+                    bullet[i].y -= speed;
+                    if(bullet[i].y<0){
+                        bullet.splice(i,1);
+                    }
+                }
+                    w = width/2-plx+50;
+                    h = height-ply-20;
+                    bullet.push({x:w,y:h});
+
+                plctx.restore();
+            },20);
+        };
+
+        plDraw(pl,68,64,plane);
+
+
+//        敌机刷新
+
+
+        function enDraw() {
+            var enemys = new Array();
+            var speed = 8;
+            var en = new Image;
+            en.src = "enemy.png"
+
+
+            setInterval(function () {
+                var x = Math.round(Math.random()* 360)-30;
+                var y = 0;
+                enemys.push({x:x,y:y});
+            },1000);
+
+
+            setInterval(function () {
+                enctx.save();
+                enctx.clearRect(0,0,360,640);
+                for(var i = 0; i<enemys.length; i++){
+                    enctx.drawImage(en,0,0,30,30,enemys[i].x,enemys[i].y,30,30);
+                    enemys[i].y += speed;
+                    if(enemys[i].y>640){
+                        enemys.splice(i,1);
+                    }
+                }
+
+
+
+
+
+
+
+                enctx.restore();
+            },30);
+
+
+
+        }
+
+        enDraw();
+
+
+
+    </script>
+
+
+
+
+
+
+
+</body>
+</html>
